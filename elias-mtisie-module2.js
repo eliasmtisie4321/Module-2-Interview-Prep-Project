@@ -861,3 +861,126 @@ That is closer to **production thinking**: don't just convert the data—**check
 For this particular exercise, though, the main things the interviewer wants to see are:
 
 **`var` → `const`/`let` + meaningful names + explicit conversion + template literals + explaining WHY.**
+
+
+```javascript
+/*
+Challenge 8: Whiteboard Challenge — Receipt Generator
+
+Variables and data types:
+- productName: string
+- unitPrice: number
+- quantityInput: string
+- taxRate: number
+- quantity: number
+- subtotal: number
+- tax: number
+- total: number
+*/
+
+
+// Four required variables at the top of the script.
+const productName = "Wireless Mouse";
+const unitPrice = 199.99;
+const quantityInput = "3";
+const taxRate = 0.15;
+
+
+// Convert the quantity from a string to a number.
+const quantity = Number(quantityInput);
+
+
+// Calculate the subtotal using only numeric values.
+const subtotal = unitPrice * quantity;
+
+
+// Calculate the tax using only numeric values.
+const tax = subtotal * taxRate;
+
+
+// Calculate the final total.
+const total = subtotal + tax;
+
+
+// Build the receipt using a template literal.
+// toFixed(2) ensures every monetary value has exactly two
+// decimal places.
+const receipt = `
+========== RECEIPT ==========
+
+Product:  ${productName}
+Price:    R${unitPrice.toFixed(2)}
+Quantity: ${quantity}
+Subtotal: R${subtotal.toFixed(2)}
+VAT:      R${tax.toFixed(2)}
+Total:    R${total.toFixed(2)}
+
+=============================
+`;
+
+console.log(receipt);
+
+
+// ==========================================================
+// EDGE CASE: INVALID QUANTITY
+// ==========================================================
+
+// This simulates a user entering letters instead of a number.
+const invalidQuantityInput = "abc";
+
+// Number("abc") cannot produce a valid number,
+// so JavaScript returns NaN.
+const invalidQuantity = Number(invalidQuantityInput);
+
+console.log("Invalid quantity:", invalidQuantity);
+
+// In a real application, we should not continue calculating
+// with NaN. We should validate the user's input and show an
+// error message asking them to enter a valid quantity.
+//
+// For example:
+//
+// if (!Number.isFinite(invalidQuantity)) {
+//     console.log("Please enter a valid quantity.");
+// }
+```
+
+### What the interviewer is checking
+
+The important flow is:
+
+```text
+"3"  →  Number("3")  →  3
+              ↓
+         quantity = 3
+              ↓
+     unitPrice × quantity
+              ↓
+          subtotal
+              ↓
+       subtotal × taxRate
+              ↓
+             tax
+              ↓
+       subtotal + tax
+              ↓
+            total
+```
+
+For the example above:
+
+- Unit price = **R199.99**
+- Quantity = **3**
+- Subtotal = **R599.97**
+- VAT = **R89.9955**
+- Total = **R689.9655**
+
+Because the output uses `toFixed(2)`, the receipt displays:
+
+```text
+Subtotal: R599.97
+VAT:      R90.00
+Total:    R689.97
+```
+
+One thing to notice: `toFixed(2)` **only formats the displayed value**; it doesn't change the underlying floating-point calculation. That's okay for this interview exercise, but real financial systems often use integer cents or decimal arithmetic to avoid floating-point precision issues.
