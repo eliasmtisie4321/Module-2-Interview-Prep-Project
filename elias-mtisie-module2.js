@@ -399,3 +399,212 @@ console.log([] + []); // ""
 // which produces "12".
 
 console.log([1] + [2]); // "12"
+
+// ==========================================================
+// CHALLENGE 5: CODE REVIEW
+// ==========================================================
+
+
+// ----------------------------------------------------------
+// BUGGY CODE
+// ----------------------------------------------------------
+
+// Runtime: Creates a global-scoped variable called userName
+// and stores the string "Sarah".
+//
+// ISSUE 1:
+// `var` is outdated and has function scope, which can cause
+// accidental variable overwriting and scope-related bugs.
+// Prefer `const` when the value does not change.
+var userName = "Sarah"
+
+// Runtime: Creates userAge and stores "25" as a STRING.
+//
+// ISSUE 2:
+// userAge should represent a number, but it is stored as a
+// string. This can cause unexpected behaviour with + and
+// other operations.
+var userAge = "25"
+
+// Runtime: Creates userScore and stores the number 85.5.
+var userScore = 85.5
+
+// Runtime: Creates scoreAdjustment and stores "10" as a STRING.
+//
+// ISSUE 3:
+// scoreAdjustment is supposed to be a numeric adjustment,
+// but it is stored as a string.
+var scoreAdjustment = "10"
+
+// Runtime: The + operator sees a number and a string.
+// JavaScript converts the number to a string and concatenates
+// them, producing "85.510" instead of 95.5.
+//
+// ISSUE 4:
+// This is a type-coercion bug. The developer probably intended
+// numeric addition, but accidentally performed string
+// concatenation.
+var newScore = userScore + scoreAdjustment
+
+// Runtime: Concatenates "New score: " with newScore and prints
+// the result to the console.
+//
+// Because of the previous bug, this prints:
+// New score: 85.510
+console.log("New score: " + newScore)
+
+// Runtime: Creates salary and stores "50000" as a STRING.
+//
+// ISSUE 5:
+// Salary should be represented as a number if mathematical
+// calculations will be performed on it.
+var salary = "50000"
+
+// Runtime: Creates TAX_RATE and stores the number 0.15.
+//
+// ISSUE 6:
+// `var` is used for a value that should never be reassigned.
+// `const` would communicate that TAX_RATE is intended to stay
+// constant.
+var TAX_RATE = 0.15
+
+// Runtime: The * operator converts the string "50000" to the
+// number 50000 and multiplies it by 0.15.
+// Result: 7500.
+//
+// ISSUE 7:
+// Although this happens to work, relying on JavaScript's
+// automatic type coercion hides the fact that salary is a
+// string. Explicitly storing salary as a number is clearer
+// and safer.
+var tax = salary * TAX_RATE
+
+// Runtime: Converts tax into a string as part of the +
+// expression and prints "Tax: R7500".
+console.log("Tax: R" + tax)
+
+// Runtime: Subtracts the string "25" from 65.
+// The - operator converts "25" into the number 25.
+// Result: 40.
+//
+// ISSUE 8:
+// This works because JavaScript performs automatic conversion,
+// but userAge should already be a number. Relying on implicit
+// conversion makes the code harder to reason about.
+var yearsUntilRetirement = 65 - userAge
+
+// Runtime: Converts yearsUntilRetirement into a string and
+// prints "Years until retirement: 40".
+console.log("Years until retirement: " + yearsUntilRetirement)
+
+// Runtime: The + operator receives the string "25" and the
+// number 85.5. Because one value is a string, JavaScript
+// performs string concatenation.
+//
+// Result: "2585.5"
+//
+// ISSUE 9:
+// This is another type-coercion bug. The likely intention was
+// to add the age and score numerically, but the result is a
+// string instead.
+var totalAgeAndScore = userAge + userScore
+
+// Runtime: Prints "2585.5".
+console.log(totalAgeAndScore)
+
+// Runtime: Creates isAdmin and stores the STRING "false".
+//
+// ISSUE 10:
+// This is a serious boolean bug. The string "false" is truthy
+// in JavaScript. It is NOT the same as the boolean false.
+var isAdmin = "false"
+
+// Runtime: Boolean("false") returns true because every non-empty
+// string is truthy.
+//
+// So this prints:
+// Admin: true
+//
+// This is probably the opposite of what the developer intended.
+console.log("Admin: " + Boolean(isAdmin))
+
+
+// ==========================================================
+// FULLY CORRECTED VERSION
+// ==========================================================
+
+// Use const for values that should not be reassigned.
+const userName = "Sarah";
+
+// Store age as a number because we will perform calculations.
+const userAge = 25;
+
+// Store the score as a number.
+const userScore = 85.5;
+
+// Store the adjustment as a number.
+const scoreAdjustment = 10;
+
+// Both values are numbers, so + performs numeric addition.
+const newScore = userScore + scoreAdjustment;
+
+console.log("New score: " + newScore);
+
+// Store salary as a number because it will be used in
+// mathematical calculations.
+const salary = 50000;
+
+// Tax rate should not change during the program.
+const TAX_RATE = 0.15;
+
+// Both salary and TAX_RATE are numbers.
+const tax = salary * TAX_RATE;
+
+console.log("Tax: R" + tax);
+
+// Store retirement age as a number.
+const retirementAge = 65;
+
+// Both values are numbers, so subtraction works without
+// relying on automatic string conversion.
+const yearsUntilRetirement = retirementAge - userAge;
+
+console.log("Years until retirement: " + yearsUntilRetirement);
+
+// Both values are numbers, so this performs numeric addition.
+const totalAgeAndScore = userAge + userScore;
+
+console.log(totalAgeAndScore);
+
+// Store a real boolean instead of the string "false".
+const isAdmin = false;
+
+console.log("Admin: " + isAdmin);
+
+
+// ==========================================================
+// CODE REVIEW SUMMARY
+// ==========================================================
+
+// 1. Replaced var with const because these values are not reassigned.
+//
+// 2. Changed userAge from "25" to 25 so it is a number.
+//
+// 3. Changed scoreAdjustment from "10" to 10.
+//
+// 4. Fixed newScore so 85.5 + 10 produces 95.5 instead of
+//    the string "85.510".
+//
+// 5. Changed salary from "50000" to 50000.
+//
+// 6. Changed TAX_RATE from var to const.
+//
+// 7. Removed unnecessary reliance on automatic type coercion.
+//
+// 8. Changed retirement calculations to use numeric values.
+//
+// 9. Fixed totalAgeAndScore so it performs numeric addition.
+//
+// 10. Changed isAdmin from the string "false" to the boolean
+//     false. This prevents Boolean("false") from incorrectly
+//     becoming true.
