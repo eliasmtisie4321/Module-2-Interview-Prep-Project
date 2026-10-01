@@ -220,3 +220,182 @@ console.log("String:", String(h), typeof String(h));
 // If my application expects an empty input to be invalid,
 // blindly using Number() could incorrectly treat the empty
 // input as the number 0.
+
+// ==========================================================
+// Challenge 4: What does this print? And why?
+// ==========================================================
+
+
+// ==========================================================
+// 1. "5" + 3
+// ==========================================================
+
+// Prediction:
+// It will print "53".
+// The result will be a string.
+// WHY: The + operator can mean addition or string concatenation.
+// Because one value is already a string, JavaScript converts 3
+// to a string and joins the two values together.
+
+console.log("5" + 3); // "53"
+
+
+// ==========================================================
+// 2. "5" - 3
+// ==========================================================
+
+// Prediction:
+// It will print 2.
+// The result will be a number.
+// WHY: The - operator only performs mathematical subtraction.
+// JavaScript converts the string "5" into the number 5.
+
+console.log("5" - 3); // 2
+
+
+// ==========================================================
+// 3. "5" * "2"
+// ==========================================================
+
+// Prediction:
+// It will print 10.
+// The result will be a number.
+// WHY: The * operator performs multiplication.
+// JavaScript converts both strings into numbers.
+
+console.log("5" * "2"); // 10
+
+
+// ==========================================================
+// 4. true + 1
+// ==========================================================
+
+// Prediction:
+// It will print 2.
+// The result will be a number.
+// WHY: When true is used in a mathematical operation,
+// JavaScript converts true to 1.
+// So this becomes 1 + 1.
+
+console.log(true + 1); // 2
+
+
+// ==========================================================
+// 5. true + "1"
+// ==========================================================
+
+// Prediction:
+// It will print "true1".
+// The result will be a string.
+// WHY: Because one operand is a string, + performs string
+// concatenation instead of numeric addition.
+// true is converted to the string "true".
+
+console.log(true + "1"); // "true1"
+
+
+// ==========================================================
+// 6. false + null
+// ==========================================================
+
+// Prediction:
+// It will print 0.
+// The result will be a number.
+// WHY: This is numeric addition because neither value is a
+// string. In a numeric context, false becomes 0 and null
+// becomes 0.
+// So this becomes 0 + 0.
+
+console.log(false + null); // 0
+
+
+// ==========================================================
+// 7. null + undefined
+// ==========================================================
+
+// Prediction:
+// It will print NaN.
+// The result will be a number.
+// WHY: null becomes 0 in numeric conversion, but undefined
+// becomes NaN.
+// 0 + NaN results in NaN.
+
+console.log(null + undefined); // NaN
+
+
+// ==========================================================
+// 8. 1 / 0
+// ==========================================================
+
+// Prediction:
+// It will print Infinity.
+// The result will be a number.
+// WHY: JavaScript uses IEEE 754 floating-point numbers.
+// Dividing a positive number by zero produces positive Infinity.
+
+console.log(1 / 0); // Infinity
+
+
+// ==========================================================
+// 9. 0 / 0
+// ==========================================================
+
+// Prediction:
+// It will print NaN.
+// The result will be a number.
+// WHY: 0 divided by 0 does not have a meaningful numeric result,
+// so JavaScript produces the special numeric value NaN.
+// NaN means "Not a Number".
+
+console.log(0 / 0); // NaN
+
+
+// ==========================================================
+// 10. "abc" - 1
+// ==========================================================
+
+// Prediction:
+// It will print NaN.
+// The result will be a number.
+// WHY: The - operator forces JavaScript to convert "abc"
+// into a number. "abc" cannot be converted into a valid number,
+// so the conversion produces NaN.
+// NaN - 1 is still NaN.
+
+console.log("abc" - 1); // NaN
+
+
+// ==========================================================
+// 11. [] + []
+// ==========================================================
+
+// Prediction:
+// It will print "" (an empty string).
+// The result will be a string.
+// WHY: With +, arrays are converted to primitive values.
+// An empty array converts to an empty string.
+// So this effectively becomes:
+// "" + ""
+// which produces "".
+
+console.log([] + []); // ""
+
+
+// ==========================================================
+// 12. [1] + [2]
+// ==========================================================
+
+// Prediction:
+// It will print "12".
+// The result will be a string.
+// WHY: The arrays are converted to primitive values.
+// [1] becomes "1" and [2] becomes "2".
+// The + operator then concatenates the strings.
+//
+// So:
+// [1] + [2]
+// becomes:
+// "1" + "2"
+// which produces "12".
+
+console.log([1] + [2]); // "12"
