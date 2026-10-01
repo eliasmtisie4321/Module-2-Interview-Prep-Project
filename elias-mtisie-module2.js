@@ -9,3 +9,5 @@ let myFavTemp = 20.1;
 //datatype is let because weather can change overtime
 const notANumber = 0 / 0;
 // Data type: number. I used const because I do not need to reassign this value.
+const infiniteValue = 1 / 0;
+// Data type: number. I used const because I do not need to reassign this value
