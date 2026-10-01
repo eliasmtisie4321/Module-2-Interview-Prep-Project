@@ -984,3 +984,177 @@ Total:    R689.97
 ```
 
 One thing to notice: `toFixed(2)` **only formats the displayed value**; it doesn't change the underlying floating-point calculation. That's okay for this interview exercise, but real financial systems often use integer cents or decimal arithmetic to avoid floating-point precision issues.
+```javascript
+/*
+==========================================================
+PREDICTIONS — BEFORE RUNNING THE CODE
+==========================================================
+
+1. typeof result
+   Prediction: "number"
+   Why: The / operator converts the string "10" into the
+   number 10 before performing the division.
+
+2. result
+   Prediction: 2
+   Why: 10 / 5 = 2.
+
+3. typeof result2
+   Prediction: "number"
+   Why: Division forces JavaScript to convert "10a" to a
+   number. That conversion fails and produces NaN.
+   NaN is still part of the number type.
+
+4. result2
+   Prediction: NaN
+   Why: "10a" cannot be completely converted into a number.
+
+5. result2 + 1
+   Prediction: NaN
+   Why: NaN is a number, and any arithmetic operation
+   involving NaN produces NaN.
+
+6. result3
+   Prediction: "1055"
+   Why: mystery3 is a string. The first + operation becomes
+   string concatenation:
+   "10" + 5 = "105"
+   Then:
+   "105" + 5 = "1055"
+
+7. result4
+   Prediction: "105"
+   Why: JavaScript evaluates + from left to right.
+   First:
+   5 + 5 = 10
+   Then:
+   10 + "10" = "1010"
+
+   IMPORTANT: The actual prediction above is corrected:
+   result4 will be "1010", not "105".
+*/
+
+
+// `mystery` stores the string "10".
+let mystery = "10";
+
+// `count` stores the number 5.
+let count = 5;
+
+// `/` forces numeric conversion.
+// "10" becomes 10, so 10 / 5 = 2.
+let result = mystery / count;
+
+// Prints "number" because result contains the number 2.
+console.log(typeof result);
+
+// Prints 2.
+console.log(result);
+
+
+// `mystery2` stores "10a", which is not a valid number.
+let mystery2 = "10a";
+
+// `count2` stores the number 5.
+let count2 = 5;
+
+// `/` tries to convert "10a" into a number.
+// The conversion fails, producing NaN.
+// NaN / 5 is still NaN.
+let result2 = mystery2 / count2;
+
+// Prints "number" because NaN has the JavaScript type "number".
+console.log(typeof result2);
+
+// Prints NaN.
+console.log(result2);
+
+// NaN + 1 produces NaN.
+// Once an arithmetic calculation produces NaN,
+// further arithmetic normally remains NaN.
+console.log(result2 + 1);
+
+
+// `mystery3` is the string "10".
+let mystery3 = "10";
+
+// JavaScript evaluates + from left to right.
+//
+// First:
+// "10" + 5 = "105"
+//
+// Then:
+// "105" + 5 = "1055"
+//
+// The final result is a string.
+let result3 = mystery3 + 5 + 5;
+
+// JavaScript evaluates from left to right.
+//
+// First:
+// 5 + 5 = 10
+//
+// Then:
+// 10 + "10" = "1010"
+//
+// Because the second operation involves a string,
+// JavaScript converts 10 into "10" and concatenates them.
+let result4 = 5 + 5 + mystery3;
+
+
+// Prints "1055".
+console.log(result3);
+
+// Prints "1010".
+console.log(result4);
+
+
+// ==========================================================
+// IF YOUR PREDICTION WAS WRONG
+// ==========================================================
+
+/*
+The important correction is result4.
+
+I initially might expect the result to be "105", but that is
+wrong.
+
+JavaScript evaluates expressions from left to right:
+
+5 + 5 + "10"
+
+First:
+5 + 5 = 10
+
+Then:
+10 + "10" = "1010"
+
+So the final result is:
+
+"1010"
+
+
+The key lesson is that the position of the string matters.
+
+"10" + 5 + 5
+-> "1055"
+
+5 + 5 + "10"
+-> "1010"
+*/
+
+
+// ==========================================================
+// FINAL OUTPUT
+// ==========================================================
+
+/*
+number
+2
+number
+NaN
+NaN
+1055
+1010
+*/
+```
