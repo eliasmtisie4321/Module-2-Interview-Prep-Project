@@ -608,3 +608,256 @@ console.log("Admin: " + isAdmin);
 // 10. Changed isAdmin from the string "false" to the boolean
 //     false. This prevents Boolean("false") from incorrectly
 //     becoming true.
+
+// ==========================================================
+// Challenge 6: Why does 0.1 + 0.2 not equal 0.3?
+// ==========================================================
+
+
+// ==========================================================
+// 1. 0.1 + 0.2
+// ==========================================================
+
+console.log(0.1 + 0.2);
+
+// Expected output:
+// 0.30000000000000004
+
+
+// ==========================================================
+// 2. 0.3 - 0.1
+// ==========================================================
+
+console.log(0.3 - 0.1);
+
+// Expected output:
+// 0.19999999999999998
+
+
+// ==========================================================
+// 3. 0.1 * 3
+// ==========================================================
+
+console.log(0.1 * 3);
+
+// Expected output:
+// 0.30000000000000004
+
+
+// ==========================================================
+// 4. 0.1 + 0.2 === 0.3
+// ==========================================================
+
+console.log(0.1 + 0.2 === 0.3);
+
+// Expected output:
+// false
+
+
+// ==========================================================
+// WHY DOES THIS HAPPEN?
+// ==========================================================
+
+/*
+JavaScript uses the IEEE 754 double-precision floating-point
+format to store numbers.
+
+Computers store numbers internally using binary (0s and 1s),
+not decimal digits.
+
+Some decimal numbers, such as 0.1 and 0.2, cannot be represented
+exactly as a finite binary number.
+
+JavaScript therefore stores the closest possible binary
+representation of those numbers.
+
+When JavaScript calculates:
+
+0.1 + 0.2
+
+the small representation errors are combined, producing:
+
+0.30000000000000004
+
+This is not really a JavaScript-only problem. Almost every
+programming language that uses IEEE 754 floating-point numbers
+can have the same issue.
+
+The problem is not that JavaScript cannot do basic addition.
+The problem is that some decimal fractions cannot be represented
+exactly in binary floating-point.
+*/
+
+
+// ==========================================================
+// SAFE COMPARISON USING Number.EPSILON
+// ==========================================================
+
+const result = 0.1 + 0.2;
+
+const isCloseEnough =
+    Math.abs(result - 0.3) < Number.EPSILON;
+
+console.log(isCloseEnough);
+
+// Output:
+// true
+
+
+// ==========================================================
+// WHAT IS Number.EPSILON?
+// ==========================================================
+
+/*
+Number.EPSILON is the smallest difference between 1 and the
+next larger number that JavaScript can represent as a Number.
+
+It is approximately:
+
+2.220446049250313e-16
+
+We use it here as a small tolerance instead of expecting two
+floating-point calculations to be exactly equal.
+
+Instead of asking:
+
+result === 0.3
+
+we ask whether the difference between result and 0.3 is small
+enough to be considered equal for our purpose.
+
+Math.abs(result - 0.3) gives us the size of the difference.
+
+If that difference is smaller than Number.EPSILON, we treat the
+values as close enough.
+*/
+
+
+// ==========================================================
+// WHY MONEY IS OFTEN STORED AS CENTS
+// ==========================================================
+
+/*
+Financial applications often avoid storing money directly as
+floating-point decimal values.
+
+For example, instead of:
+
+R10.50
+
+an application might store:
+
+1050 cents
+
+as the integer 1050.
+
+Integers can represent these whole-cent values exactly, which
+avoids many floating-point precision problems.
+
+The same idea can be applied to South African Rands:
+
+R25.75 -> 2575 cents
+
+This is why you may see financial systems work with integer
+cents rather than floating-point Rands.
+*/
+
+
+```javascript
+// ==========================================================
+// ORIGINAL CODE — WITH CODE REVIEW COMMENTS
+// ==========================================================
+
+// Problem 1: `var` has function scope and can lead to accidental
+// reassignment or scope-related bugs. `const` is clearer when
+// the variable should not be reassigned.
+var p = "199.99"
+
+// Problem 2: `p` is not descriptive. A developer reading this
+// has to guess what "p" represents.
+//
+// Problem 3: The price is stored as a string even though it will
+// be used as a number. The multiplication operator will
+// automatically convert it, but relying on implicit conversion
+// makes the code less clear.
+var q = "3"
+
+// Problem 4: `q` is also not descriptive. Something like
+// quantity clearly explains what the value represents.
+//
+// Problem 5: Quantity is stored as a string. It should be
+// explicitly converted to a number before calculations.
+var t = 0.15
+
+// Problem 6: `t` is not descriptive. A name such as taxRate
+// explains what 0.15 represents.
+//
+// Problem 7: `var` is being used even though the value should
+// not be reassigned. `const` communicates that clearly.
+var sub = p * q
+
+// Problem 8: `sub` is vague. A name such as subtotal makes the
+// meaning of the calculated value immediately clear.
+//
+// Problem 9: The calculation relies on JavaScript automatically
+// converting p and q from strings into numbers. Explicit
+// conversion makes the programmer's intention clear.
+```
+
+### Rewritten production version
+
+```javascript
+// ==========================================================
+// REWRITTEN VERSION — PRODUCTION STYLE
+// ==========================================================
+
+// WHY: `const` is used because the price should not be reassigned.
+// A descriptive name makes the purpose of the value immediately clear.
+const price = "199.99";
+
+// WHY: Explicit conversion makes sure we are working with a number
+// before performing calculations instead of relying on JavaScript's
+// automatic type coercion.
+const numericPrice = Number(price);
+
+// WHY: `quantity` is more meaningful than a name like `q`.
+// Number() explicitly converts the input into a number so that
+// multiplication behaves predictably.
+const quantity = Number("3");
+
+// WHY: A descriptive name makes it clear that 0.15 represents
+// a tax rate. `const` is appropriate because the rate is not
+// being reassigned.
+const taxRate = 0.15;
+
+// WHY: Using clearly typed numeric variables makes the calculation
+// easy to understand and avoids relying on implicit conversion.
+const subtotal = numericPrice * quantity;
+
+// WHY: Template literals make it easy to build readable output
+// and allow variables to be inserted directly into the string.
+console.log(`Subtotal: R${subtotal}`);
+```
+
+### One improvement I'd make in a real application
+
+If `price` and `quantity` are coming from a **user input, API, or form**, I'd also validate them instead of assuming `Number()` succeeded:
+
+```javascript
+const price = Number("199.99");
+const quantity = Number("3");
+
+if (!Number.isFinite(price) || !Number.isFinite(quantity)) {
+    console.log("Invalid price or quantity.");
+} else {
+    const subtotal = price * quantity;
+
+    console.log(`Subtotal: R${subtotal}`);
+}
+```
+
+That is closer to **production thinking**: don't just convert the data—**check that the conversion produced a usable value**.
+
+For this particular exercise, though, the main things the interviewer wants to see are:
+
+**`var` → `const`/`let` + meaningful names + explicit conversion + template literals + explaining WHY.**
